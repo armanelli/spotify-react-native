@@ -15,7 +15,7 @@ export default Creators;
 
 export const INITIAL_STATE = Immutable({
   podcast: null,
-  current: null
+  current_episode: null
 });
 
 /* Reducers */
@@ -27,5 +27,5 @@ export const INITIAL_STATE = Immutable({
 
 export const reducer = createReducer(INITIAL_STATE, {
   [Types.SET_PODCAST_SUCCESS]: (state, { podcast }) =>
-    state.merge({ podcast, current: podcast.tracks[0].id })
+    state.merge({ podcast, current_episode: podcast.tracks[0].id })
 });

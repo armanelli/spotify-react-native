@@ -2,6 +2,10 @@ import React, { Component } from "react";
 
 import Icon from "react-native-vector-icons/MaterialIcons";
 
+import { connect } from "react-redux";
+import { bindActionCreators } from "redux";
+import PlayerActions from "../../store/ducks/player";
+
 import { View } from "react-native";
 
 import {
@@ -19,11 +23,18 @@ import {
   Title
 } from "./styles";
 
-export default class Podcast extends Component {
+class Podcast extends Component {
   handleBack = () => {
     const { navigation } = this.props;
 
     navigation.goBack();
+  };
+
+  handlePlay = () => {
+    const { setPodcastRequest, navigation } = this.props;
+    const podcast = navigation.getParam("podcast");
+
+    setPodcastRequest(podcast);
   };
 
   render() {
@@ -45,7 +56,7 @@ export default class Podcast extends Component {
 
               <PodcastTitle>{podcast.title}</PodcastTitle>
 
-              <PlayButton onPress={() => {}}>
+              <PlayButton onPress={() => this.handlePlay}>
                 <PlayButtonText>REPRODUZIR</PlayButtonText>
               </PlayButton>
             </PodcastDetails>
@@ -53,7 +64,7 @@ export default class Podcast extends Component {
           data={podcast.tracks}
           keyExtractor={episode => String(episode.id)}
           renderItem={({ item: episode }) => (
-            <Episode>
+            <Episode onPress={() => this.handlePlay}>
               <Title>{episode.title}</Title>
               <Author>{episode.artist}</Author>
             </Episode>
@@ -63,3 +74,11 @@ export default class Podcast extends Component {
     );
   }
 }
+
+const mapDispatchToProps = dispatch =>
+  bindActionCreators(PlayerActions, dispatch);
+
+export default connect(
+  null,
+  mapDispatchToProps
+)(Podcast);
